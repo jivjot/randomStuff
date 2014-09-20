@@ -1,5 +1,7 @@
 #ifndef trie_h
 #define trie_h
+#include <string>
+
 class trie
 {
     static const int size = 256;
@@ -38,7 +40,7 @@ class trie
         }
         child[*str]->insert(str+1);
     }
-    void insert(const string &s)
+    void insert(const std::string &s)
     {
         insert(s.c_str());
     }
@@ -56,7 +58,7 @@ class trie
         }
         return false;
     }
-    bool search(const string &s) const
+    bool search(const std::string &s) const
     {
         return search(s.c_str());
     }
