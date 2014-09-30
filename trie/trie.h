@@ -2,28 +2,30 @@
 #define trie_h
 #include <string>
 
-class trie
+class Trie
 {
     static const int size = 256;
-    char c;
-    trie * child[size];
+    long long _counter;
+    long long _childCounter;
+    Trie * _child[size];
     public:
-    trie()
+    Trie()
     {
-        c = -1;//not leaf 0 end of string
+        _counter = 0;
+        _childCounter = 0;
         for(int i = 0;i<size;i++)
         {
-            child[i] = NULL;
+            _child[i] = NULL;
         }
     }
-    ~trie()
+    ~Trie()
     {
         for(int i = 0;i<size;i++)
         {
-            if(child[i] != NULL)
+            if(_child[i] != NULL)
             {
-                delete child[i];
-                child[i] = NULL;
+                delete _child[i];
+                _child[i] = NULL;
             }
         }
     }
@@ -31,32 +33,53 @@ class trie
     {
         if(*str == '\0')
         {
-            c = 0;
+            _counter++;
             return;
         }
-        if(child[*str] == NULL)
+
+        if(_child[*str] == NULL)
         {
-            child[*str] = new trie;
+            _child[*str] = new Trie();
+            _childCounter++;
         }
-        child[*str]->insert(str+1);
+        _child[*str]->insert(str+1);
+
     }
     void insert(const std::string &s)
     {
         insert(s.c_str());
     }
+    bool deletePattern(const char *str)
+    {
+        if(*str == '\0')
+        {
+            _counter--;
+        }
+        else if(_child[*str] != NULL)
+        {
+            if(_child[*str]->deletePattern(str + 1))
+            {
+                _childCounter--;
+                delete _child[*str];
+                _child[*str] = NULL;
+            }
+        }
+        
+        if(_counter <= 0 && _childCounter <= 0)
+            return true;
+        else
+            return false;
+    }
     bool search(const char*str) const
     {
-        if(str == '\0')
-        {
+        if(*str == '\0')
             return true;
-        }
-        if(child[*str] != NULL)
+        else if(_child[*str] != NULL)
         {
-            if(*(str + 1) == '\0' && c == 0)
-                return true;
-            return child[*str]->search(str + 1);
+            return _child[*str]->search(str + 1);
         }
-        return false;
+        else
+            return false;
     }
     bool search(const std::string &s) const
     {

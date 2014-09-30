@@ -3,7 +3,7 @@
 int main()
 {
     std::string s("banana");
-    trie t;
+    Trie t;
     for(int i = 0;i<s.size();i++)
     {
         t.insert(s.substr(i));
