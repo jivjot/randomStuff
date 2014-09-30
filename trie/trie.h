@@ -1,7 +1,7 @@
 #ifndef trie_h
 #define trie_h
 #include <string>
-
+#include <iostream>
 class Trie
 {
     static const int size = 256;
@@ -84,6 +84,21 @@ class Trie
     bool search(const std::string &s) const
     {
         return search(s.c_str());
+    }
+
+    void depthFirstSearch(std::string s)
+    {
+        if(_counter > 0)
+        {
+            std::cout<<"\n"<<s<<"->"<<_counter<<std::endl;
+        }
+        for(int i = 0;i<size;i++)
+        {
+            if(_child[i] != NULL)
+            {
+                _child[i]->depthFirstSearch(s + char(i));
+            }
+        }
     }
 
 };
